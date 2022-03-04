@@ -1,0 +1,12 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        globally_quoted_identifiers: true
+  datasource:
+    username: dlarcom
+    password: YITtZ15Fke6kqI9KWLNb
+    url: jdbc:mysql://cloudarchdb.cammiojta5eb.us-east-1.rds.amazonaws.com:3306/cloudarch
+    driver-class-name: com.mysql.cj.jdbc.Driver
