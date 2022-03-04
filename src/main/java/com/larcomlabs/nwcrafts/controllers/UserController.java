@@ -1,5 +1,6 @@
 package com.larcomlabs.nwcrafts.controllers;
 
+import com.larcomlabs.nwcrafts.models.Alignment;
 import com.larcomlabs.nwcrafts.models.CraftRequest;
 import com.larcomlabs.nwcrafts.models.User;
 import com.larcomlabs.nwcrafts.repos.UserRepo;
@@ -44,24 +45,26 @@ public class UserController
         repo.deleteById(username);
     }
 
-    @PutMapping("/{username}")
-    public void updateUser(@PathVariable String username, @RequestBody User u) {
-        User user = repo.findById(username).get();
-        //only allow changes to the email and server being played on.
-        user.setEmail(u.getEmail());
-        user.setServer(u.getServer());
+    @PutMapping("/{id}")
+    public void updateUser(@PathVariable("id") String username, @RequestBody User u) {
+        User old = repo.findById(username).get();
+        old.setEmail(u.getEmail());
+        old.setServer(u.getServer());
+        old.setPassword(encoder.encode(u.getPassword()));
+        old.setAlignment(u.getAlignment());
+        repo.save(old);
     }
 
-    @PutMapping("/{id}/req")
-    public void addRequest(@PathVariable("id") String username, @RequestBody String req) {
-        User u = repo.getById(username);
 
-        JSONObject obj = new JSONObject(req);
-        int tip = obj.getInt("tip");
-        String trade = obj.getString("trade");
+    @PatchMapping("/{id}/req")
+    public void addRequest(@PathVariable("id") String username, @RequestBody CraftRequest req) {
+       User userRequesting = repo.findById(username).get();
+       userRequesting.addRequest(req);
+       repo.save(userRequesting);
+    }
 
-        CraftRequest request = new CraftRequest(trade, tip);
-        u.addRequest(request);
-        repo.save(u);
+    @DeleteMapping("/purge")
+    public void deleteAll() {
+        repo.deleteAll();
     }
 }

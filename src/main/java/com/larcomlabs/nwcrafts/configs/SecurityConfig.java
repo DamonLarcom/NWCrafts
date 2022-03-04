@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.transaction.annotation.Transactional;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter
@@ -29,6 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
     protected void configure(HttpSecurity http) throws Exception
     {
         http.authorizeRequests()
+                .antMatchers(HttpMethod.GET).permitAll()
                 .antMatchers(HttpMethod.POST,"/user").permitAll()
                 .antMatchers(HttpMethod.PUT, "/user/**").permitAll()
                 .anyRequest().authenticated()
@@ -46,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
             @Override
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
             {
-                return repo.getById(username);
+                return repo.findById(username).orElse(null);
             }
         };
     }

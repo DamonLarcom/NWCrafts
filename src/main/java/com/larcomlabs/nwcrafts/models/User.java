@@ -27,6 +27,9 @@ public class User implements UserDetails
     private String password;
     private String server;
 
+    @Enumerated(EnumType.STRING)
+    private Alignment alignment;
+
     @OneToMany(mappedBy = "requester")
     private List<CraftRequest> requests;
 
@@ -79,6 +82,16 @@ public class User implements UserDetails
     @JsonProperty
     public void setPassword(String p){
         this.password = p;
+    }
+
+    public Alignment getAlignment()
+    {
+        return alignment;
+    }
+
+    public void setAlignment(Alignment alignment)
+    {
+        this.alignment = alignment;
     }
 
     public void addRequest(CraftRequest req) {

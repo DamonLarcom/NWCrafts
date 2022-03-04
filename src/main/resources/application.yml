@@ -10,3 +10,6 @@ spring:
     password: YITtZ15Fke6kqI9KWLNb
     url: jdbc:mysql://cloudarchdb.cammiojta5eb.us-east-1.rds.amazonaws.com:3306/cloudarch
     driver-class-name: com.mysql.cj.jdbc.Driver
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
