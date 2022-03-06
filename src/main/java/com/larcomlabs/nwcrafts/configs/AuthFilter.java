@@ -51,7 +51,7 @@ public class AuthFilter extends UsernamePasswordAuthenticationFilter
                 .sign(algo);
         String refreshToken = JWT.create()
                 .withSubject(u.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 10*60*1000))
+                .withExpiresAt(new Date(System.currentTimeMillis() + 10*360*24*1000)) //10 days
                 .withIssuer(request.getRequestURL().toString())
                 .withClaim("roles", u.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algo);

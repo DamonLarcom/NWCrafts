@@ -45,7 +45,8 @@ public class VerifyFilter extends OncePerRequestFilter
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                     filterChain.doFilter(request,response);
                 } catch(Exception e) {
-                    System.err.println("Could not verify");
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    System.out.println(response.getStatus()+ ": Could not verify");
                 }
             } else {
                 filterChain.doFilter(request,response);

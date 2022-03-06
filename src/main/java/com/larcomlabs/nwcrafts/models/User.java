@@ -26,27 +26,29 @@ public class User implements UserDetails
     private String username;
     private String password;
     private String server;
-
     @Enumerated(EnumType.STRING)
     private Alignment alignment;
+    private String email;
+    private boolean isCrafter;
 
     @OneToMany(mappedBy = "requester")
-    private List<CraftRequest> requests;
+    private List<CraftRequest> requestsFrom;
+    @OneToMany(mappedBy = "requestee")
+    private List<CraftRequest> requestsTo;
 
-    private String email;
+    //specific to crafters
+    @OneToMany(mappedBy = "player")
+    private List<TradeSkill> tradeSkills;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities()
     {
         List<GrantedAuthority> auths = new ArrayList<>();
-        auths.add(new GrantedAuthority()
-        {
-            @Override
-            public String getAuthority()
-            {
-                return "USER";
-            }
-        });
+        if(isCrafter) {
+            auths.add((GrantedAuthority) () -> "ROLE_ADMIN");
+        } else {
+            auths.add((GrantedAuthority) () -> "ROLE_USER");
+        }
         return auths;
     }
 
@@ -94,7 +96,12 @@ public class User implements UserDetails
         this.alignment = alignment;
     }
 
-    public void addRequest(CraftRequest req) {
-        this.requests.add(req);
+    public void addRequestTo(CraftRequest req) {
+        this.requestsTo.add(req);
+    }
+    public void addRequestFrom(CraftRequest req){this.requestsFrom.add(req);}
+
+    public void addTradeSkill(TradeSkill skill) {
+        this.tradeSkills.add(skill);
     }
 }

@@ -1,16 +1,16 @@
 package com.larcomlabs.nwcrafts.controllers;
 
-import com.larcomlabs.nwcrafts.models.Alignment;
 import com.larcomlabs.nwcrafts.models.CraftRequest;
+import com.larcomlabs.nwcrafts.models.TradeSkill;
 import com.larcomlabs.nwcrafts.models.User;
 import com.larcomlabs.nwcrafts.repos.UserRepo;
-import lombok.Data;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RestController
@@ -55,16 +55,13 @@ public class UserController
         repo.save(old);
     }
 
-
-    @PatchMapping("/{id}/req")
-    public void addRequest(@PathVariable("id") String username, @RequestBody CraftRequest req) {
-       User userRequesting = repo.findById(username).get();
-       userRequesting.addRequest(req);
-       repo.save(userRequesting);
-    }
-
     @DeleteMapping("/purge")
     public void deleteAll() {
         repo.deleteAll();
+    }
+
+    @GetMapping("/ref")
+    public void refreshToken(HttpServletRequest req, HttpServletResponse resp) {
+
     }
 }

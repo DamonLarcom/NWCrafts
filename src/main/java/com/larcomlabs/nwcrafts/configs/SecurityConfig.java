@@ -32,6 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
         http.authorizeRequests()
                 .antMatchers("/login").permitAll()
                 .antMatchers(HttpMethod.POST,"/user").permitAll()
+                .antMatchers("/crafter/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

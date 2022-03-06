@@ -1,14 +1,13 @@
 package com.larcomlabs.nwcrafts.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -23,6 +22,9 @@ public class CraftRequest
 
     @ManyToOne
     private User requester;
+
+    @ManyToOne
+    private User requestee;
 
     public CraftRequest(String trade, int tip){
         this.requestId = UUID.randomUUID().toString();
