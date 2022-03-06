@@ -55,9 +55,15 @@ public class UserController
         repo.save(old);
     }
 
-    @DeleteMapping("/purge")
-    public void deleteAll() {
-        repo.deleteAll();
+    @GetMapping("/{id}/req")
+    public List<CraftRequest> getRequestsFrom(@PathVariable String id, @RequestParam String type) {
+        if(type.toUpperCase().equals("FROM")) {
+            return repo.findById(id).get().getRequestsFrom();
+        } else if(type.toUpperCase().equals("TO")){
+            return repo.findById(id).get().getRequestsTo();
+        } else {
+            throw new RuntimeException("Type requested does not exist.");
+        }
     }
 
     @GetMapping("/ref")

@@ -11,10 +11,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 import static java.util.Arrays.stream;
@@ -27,13 +29,14 @@ public class VerifyFilter extends OncePerRequestFilter
         if(request.getServletPath().equals("/login")) {
             filterChain.doFilter(request, response);
         } else {
-            String authHeader = request.getHeader("Authorization");
-            if(authHeader != null && authHeader.startsWith("Bearer ")) {
+            Cookie[] authCookies = request.getCookies();
+            //access token should be first
+            String authHeader = authCookies[0].getValue();
+            if(authHeader != null) {
                 try {
-                    String token = authHeader.substring("Bearer ".length());
                     Algorithm algo = Algorithm.HMAC256("cloudhauth0");
                     JWTVerifier verifier = JWT.require(algo).build();
-                    DecodedJWT decoded = verifier.verify(token);
+                    DecodedJWT decoded = verifier.verify(authHeader);
 
                     String username = decoded.getSubject();
                     String[] roles = decoded.getClaim("roles").asArray(String.class);

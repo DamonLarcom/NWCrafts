@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -15,21 +14,21 @@ import java.util.UUID;
 public class CraftRequest
 {
     @Id
-    private String requestId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int requestId;
+
     private Date date;
-    private String trade;
     private int tip;
+
+    @Enumerated(EnumType.STRING)
+    private TradeType trade;
+
+    @Enumerated(EnumType.STRING)
+    private RequestStatus status;
 
     @ManyToOne
     private User requester;
 
     @ManyToOne
     private User requestee;
-
-    public CraftRequest(String trade, int tip){
-        this.requestId = UUID.randomUUID().toString();
-        this.date = new Date();
-        this.trade = trade;
-        this.tip = tip;
-    }
 }
