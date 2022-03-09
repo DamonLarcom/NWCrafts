@@ -1,6 +1,7 @@
 package com.larcomlabs.nwcrafts.models;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
@@ -21,12 +22,11 @@ public class TradeSkill
     private int tradeSkillId;
 
     @ManyToOne
-    @JsonIgnore
+    @JsonBackReference
     private User player;
 
     @Enumerated(EnumType.STRING)
     private TradeType type;
-    private int tradeLevel;
     private boolean hasClothingSet = false;
     private boolean hasMajors = false;
 }

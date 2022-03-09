@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/user")
+@CrossOrigin
 public class UserController
 {
     @Autowired
@@ -55,19 +57,28 @@ public class UserController
         repo.save(old);
     }
 
-    @GetMapping("/{id}/req")
-    public List<CraftRequest> getRequestsFrom(@PathVariable String id, @RequestParam String type) {
-        if(type.toUpperCase().equals("FROM")) {
-            return repo.findById(id).get().getRequestsFrom();
-        } else if(type.toUpperCase().equals("TO")){
-            return repo.findById(id).get().getRequestsTo();
-        } else {
-            throw new RuntimeException("Type requested does not exist.");
+    @GetMapping("/{id}/reqFrom")
+    public List<CraftRequest> getRequestsFrom(@PathVariable String id) {
+        List<CraftRequest> requests = new ArrayList<>();
+        User u = repo.findById(id).get();
+        for(CraftRequest req: u.getRequestsFrom()) {
+            requests.add(req);
         }
+        return requests;
     }
 
-    @GetMapping("/ref")
-    public void refreshToken(HttpServletRequest req, HttpServletResponse resp) {
+    @GetMapping("/{id}/reqTo")
+    public List<CraftRequest> getRequestsTo(@PathVariable String id) {
+        List<CraftRequest> requests = new ArrayList<>();
+        User u = repo.findById(id).get();
+        for(CraftRequest req: u.getRequestsTo()) {
+            requests.add(req);
+        }
+        return requests;
+    }
 
+    @GetMapping("/crafters")
+    public List<User> getCrafters() {
+        return repo.findByIsCrafterIsTrue();
     }
 }

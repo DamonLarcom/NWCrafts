@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 
 import static java.util.Arrays.stream;
@@ -26,17 +25,16 @@ public class VerifyFilter extends OncePerRequestFilter
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException
     {
-        if(request.getServletPath().equals("/login")) {
+        if(request.getServletPath().equals("/authenticate")) {
             filterChain.doFilter(request, response);
         } else {
-            Cookie[] authCookies = request.getCookies();
-            //access token should be first
-            String authHeader = authCookies[0].getValue();
-            if(authHeader != null) {
+            String authHeader = request.getHeader("Authorization");
+            if(authHeader != null && authHeader.startsWith("Bearer ")) {
                 try {
+                    String token = authHeader.substring("Bearer ".length());
                     Algorithm algo = Algorithm.HMAC256("cloudhauth0");
                     JWTVerifier verifier = JWT.require(algo).build();
-                    DecodedJWT decoded = verifier.verify(authHeader);
+                    DecodedJWT decoded = verifier.verify(token);
 
                     String username = decoded.getSubject();
                     String[] roles = decoded.getClaim("roles").asArray(String.class);

@@ -2,6 +2,7 @@ package com.larcomlabs.nwcrafts.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,12 +33,15 @@ public class User implements UserDetails
     private boolean isCrafter;
 
     @OneToMany(mappedBy = "requester")
+    @JsonManagedReference
     private List<CraftRequest> requestsFrom;
     @OneToMany(mappedBy = "requestee")
+    @JsonManagedReference
     private List<CraftRequest> requestsTo;
 
     //specific to crafters
     @OneToMany(mappedBy = "player")
+    @JsonManagedReference
     private List<TradeSkill> tradeSkills;
 
     @Override

@@ -1,5 +1,6 @@
 package com.larcomlabs.nwcrafts.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -27,8 +28,10 @@ public class CraftRequest
     private RequestStatus status;
 
     @ManyToOne
+    @JsonBackReference
     private User requester;
 
     @ManyToOne
+    @JsonBackReference
     private User requestee;
 }

@@ -15,6 +15,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter
@@ -30,17 +35,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
     protected void configure(HttpSecurity http) throws Exception
     {
         http.authorizeRequests()
-                .antMatchers("/login").permitAll()
+                .antMatchers("/authenticate").permitAll()
                 .antMatchers(HttpMethod.POST,"/user").permitAll()
-                .antMatchers("/crafter/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .csrf().disable()
-                .addFilter(new AuthFilter(authenticationManagerBean()))
+                .cors()
+                .and()
                 .addFilterBefore(new VerifyFilter(), UsernamePasswordAuthenticationFilter.class);
-    }
+   }
 
     @Bean
     public UserDetailsService userDetailsService() {
@@ -49,7 +54,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
             @Override
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
             {
-                return repo.findById(username).orElse(null);
+                if(repo.existsById(username)){
+                    return repo.findById(username).get();
+                } else {
+                    throw new UsernameNotFoundException("User was not found in database.");
+                }
             }
         };
     }
@@ -58,5 +67,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception{
         return super.authenticationManagerBean();
+    }
+
+    @Bean
+    public AuthFilter authFilter() throws Exception{
+        return new AuthFilter(authenticationManagerBean());
     }
 }

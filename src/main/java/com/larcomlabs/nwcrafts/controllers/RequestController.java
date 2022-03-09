@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -38,6 +39,7 @@ public class RequestController
 
         req.setRequestee(userRepo.findById(crafter).get());
         req.setRequester(requester);
+
         req.setDate(new Date());
         req.setStatus(RequestStatus.PENDING);
         repo.save(req);
