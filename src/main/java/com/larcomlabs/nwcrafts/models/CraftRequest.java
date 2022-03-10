@@ -28,10 +28,10 @@ public class CraftRequest
     private RequestStatus status;
 
     @ManyToOne
-    @JsonBackReference
+    @JsonBackReference("from")
     private User requester;
 
     @ManyToOne
-    @JsonBackReference
+    @JsonBackReference("to")
     private User requestee;
 }

@@ -33,15 +33,15 @@ public class User implements UserDetails
     private boolean isCrafter;
 
     @OneToMany(mappedBy = "requester")
-    @JsonManagedReference
+    @JsonManagedReference("from")
     private List<CraftRequest> requestsFrom;
     @OneToMany(mappedBy = "requestee")
-    @JsonManagedReference
+    @JsonManagedReference("to")
     private List<CraftRequest> requestsTo;
 
     //specific to crafters
     @OneToMany(mappedBy = "player")
-    @JsonManagedReference
+    @JsonManagedReference("trades")
     private List<TradeSkill> tradeSkills;
 
     @Override
@@ -100,12 +100,7 @@ public class User implements UserDetails
         this.alignment = alignment;
     }
 
-    public void addRequestTo(CraftRequest req) {
-        this.requestsTo.add(req);
-    }
-    public void addRequestFrom(CraftRequest req){this.requestsFrom.add(req);}
-
-    public void addTradeSkill(TradeSkill skill) {
-        this.tradeSkills.add(skill);
+    public boolean getCrafter() {
+        return isCrafter;
     }
 }

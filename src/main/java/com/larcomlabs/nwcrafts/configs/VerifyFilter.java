@@ -47,7 +47,7 @@ public class VerifyFilter extends OncePerRequestFilter
                     filterChain.doFilter(request,response);
                 } catch(Exception e) {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                    System.out.println(response.getStatus()+ ": Could not verify");
+                    System.out.println(response.getStatus()+ ": Could not verify!");
                 }
             } else {
                 filterChain.doFilter(request,response);

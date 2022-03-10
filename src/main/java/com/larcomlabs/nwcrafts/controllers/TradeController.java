@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/trade")
+@CrossOrigin
 public class TradeController
 {
     @Autowired
@@ -26,7 +27,7 @@ public class TradeController
         return repo.findAll();
     }
 
-    @PostMapping
+    @PostMapping()
     public void createTradeSkill(@RequestBody TradeSkill skill) {
         SecurityContext con = SecurityContextHolder.getContext();
         Authentication auth = con.getAuthentication();
@@ -35,11 +36,8 @@ public class TradeController
         repo.save(skill);
     }
 
-    @PutMapping("/{id}")
-    public void updateSkill(@PathVariable int id, @RequestBody TradeSkill skill) {
-        TradeSkill old = repo.findById(id).get();
-        old.setHasClothingSet(skill.isHasClothingSet());
-        old.setHasMajors(skill.isHasMajors());
-        repo.save(old);
+    @DeleteMapping("/{id}")
+    public void deleteTrade(@PathVariable int id) {
+        repo.deleteById(id);
     }
 }

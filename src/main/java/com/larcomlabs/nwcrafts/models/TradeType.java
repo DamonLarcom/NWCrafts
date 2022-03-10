@@ -6,7 +6,6 @@ public enum TradeType
     ARMORING,
     JEWELCRAFTING,
     ARCANA,
-    COOKING,
     ENGINEERING,
     FURNISHING
 }

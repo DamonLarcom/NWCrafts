@@ -32,7 +32,7 @@ public class UserController
 
     @GetMapping("/{username}")
     public User getById(@PathVariable String username){
-        return repo.getById(username);
+        return repo.findById(username).get();
     }
 
     @PostMapping
@@ -54,6 +54,7 @@ public class UserController
         old.setServer(u.getServer());
         old.setPassword(encoder.encode(u.getPassword()));
         old.setAlignment(u.getAlignment());
+        old.setCrafter(u.getCrafter());
         repo.save(old);
     }
 

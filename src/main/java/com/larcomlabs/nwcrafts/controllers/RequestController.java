@@ -11,12 +11,12 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 @RestController
 @RequestMapping("/craft")
+@CrossOrigin
 public class RequestController
 {
     @Autowired
